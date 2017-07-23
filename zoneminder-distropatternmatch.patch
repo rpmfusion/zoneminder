@@ -1,0 +1,67 @@
+--- a/CMakeLists.txt	2017-05-09 09:54:48.000000000 -0500
++++ b/CMakeLists.txt	2017-06-13 17:45:26.224997743 -0500
+@@ -150,30 +150,18 @@
+     "Build ZoneMinder for a specific distribution.  Currently, valid names are: fc24, fc25, el6, el7, OS13, FreeBSD")
+ 
+ # Reassign some variables if a target distro has been specified
+-if((ZM_TARGET_DISTRO STREQUAL "fc24") OR (ZM_TARGET_DISTRO STREQUAL "fc25"))
+-	set(ZM_RUNDIR "/var/run/zoneminder")
+-	set(ZM_SOCKDIR "/var/lib/zoneminder/sock")
+-	set(ZM_TMPDIR "/var/lib/zoneminder/temp")
+-	set(ZM_LOGDIR "/var/log/zoneminder")
+-	set(ZM_CONFIG_DIR "/etc/zm")
+-	set(ZM_WEBDIR "/usr/share/zoneminder/www")
+-	set(ZM_CGIDIR "/usr/libexec/zoneminder/cgi-bin")
+-elseif(ZM_TARGET_DISTRO STREQUAL "el6")
+-	set(ZM_RUNDIR "/var/run/zoneminder")
+-	set(ZM_SOCKDIR "/var/lib/zoneminder/sock")
+-	set(ZM_TMPDIR "/var/lib/zoneminder/temp")
+-	set(ZM_LOGDIR "/var/log/zoneminder")
+-	set(ZM_CONFIG_DIR "/etc/zm")
+-	set(ZM_WEBDIR "/usr/share/zoneminder/www")
+-	set(ZM_CGIDIR "/usr/libexec/zoneminder/cgi-bin")
+-elseif(ZM_TARGET_DISTRO STREQUAL "el7")
++if((ZM_TARGET_DISTRO MATCHES "^el") OR (ZM_TARGET_DISTRO MATCHES "^fc"))
+ 	set(ZM_RUNDIR "/var/run/zoneminder")
+ 	set(ZM_SOCKDIR "/var/lib/zoneminder/sock")
+ 	set(ZM_TMPDIR "/var/lib/zoneminder/temp")
+ 	set(ZM_LOGDIR "/var/log/zoneminder")
+ 	set(ZM_CONFIG_DIR "/etc/zm")
++        set(ZM_CONFIG_SUBDIR "/etc/zm/conf.d")
+ 	set(ZM_WEBDIR "/usr/share/zoneminder/www")
+ 	set(ZM_CGIDIR "/usr/libexec/zoneminder/cgi-bin")
++	set(ZM_DIR_EVENTS "/var/lib/zoneminder/events")
++	set(ZM_DIR_IMAGES "/var/lib/zoneminder/images")
++	set(ZM_PATH_ZMS "/cgi-bin-zm/nph-zms")
+ elseif(ZM_TARGET_DISTRO STREQUAL "OS13")
+ 	set(ZM_RUNDIR "/var/run/zoneminder")
+ 	set(ZM_TMPDIR "/var/run/zoneminder")
+@@ -191,10 +179,11 @@
+         set(ZM_WEB_USER "www")
+         set(ZM_WEB_GROUP "www")
+         set(ZM_CONFIG_DIR "/usr/local/etc/zm")
++        set(ZM_CONFIG_SUBDIR "/usr/local/etc/zm/conf.d")
+         set(ZM_WEBDIR "/usr/local/share/zoneminder/www")
+         set(ZM_CGIDIR "/usr/local/libexec/zoneminder/cgi-bin")
+         set(ZM_PERL_MM_PARMS "INSTALLDIRS=site")
+-endif((ZM_TARGET_DISTRO STREQUAL "fc24") OR (ZM_TARGET_DISTRO STREQUAL "fc25"))
++endif((ZM_TARGET_DISTRO MATCHES "^el") OR (ZM_TARGET_DISTRO MATCHES "^fc"))
+ 
+ # Required for certain checks to work
+ set(CMAKE_EXTRA_INCLUDE_FILES 
+@@ -709,13 +698,11 @@
+ endif(ZM_ONVIF)
+ 
+ # Process distro subdirectories
+-if((ZM_TARGET_DISTRO STREQUAL "fc24") OR (ZM_TARGET_DISTRO STREQUAL "fc25"))
+-	add_subdirectory(distros/redhat)
+-elseif((ZM_TARGET_DISTRO STREQUAL "el6") OR (ZM_TARGET_DISTRO STREQUAL "el7"))
++if((ZM_TARGET_DISTRO MATCHES "^el") OR (ZM_TARGET_DISTRO MATCHES "^fc"))
+ 	add_subdirectory(distros/redhat)
+ elseif(ZM_TARGET_DISTRO STREQUAL "OS13")
+ 	add_subdirectory(distros/opensuse)
+-endif((ZM_TARGET_DISTRO STREQUAL "fc24") OR (ZM_TARGET_DISTRO STREQUAL "fc25"))
++endif((ZM_TARGET_DISTRO MATCHES "^el") OR (ZM_TARGET_DISTRO MATCHES "^fc"))
+ 
+ # Print optional libraries detection status
+ message(STATUS "Optional libraries found:${optlibsfound}")
