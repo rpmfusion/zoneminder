@@ -50,6 +50,7 @@ Source1: https://github.com/FriendsOfCake/crud/archive/v%{crud_version}.tar.gz#/
 Patch0: zoneminder-ftbsf27.patch
 Patch1: zoneminder-distropatternmatch.patch
 Patch2: zoneminder-apacheconfig.patch
+Patch3: ffmpeg35_buildfix.patch
 
 %{?with_init_systemd:BuildRequires: systemd-devel}
 %{?with_init_systemd:BuildRequires: mariadb-devel}

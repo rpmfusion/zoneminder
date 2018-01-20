@@ -1,0 +1,50 @@
+--- a/src/zm_mpeg.cpp
++++ b/src/zm_mpeg.cpp
+@@ -29,6 +29,7 @@
+ {
+ #include <libavutil/mathematics.h>
+ #include <libavcodec/avcodec.h>
++#define 	AVFMT_RAWPICTURE   0x0020
+ }
+ 
+ bool VideoStream::initialised = false;
+@@ -240,7 +241,7 @@
+     {
+       // Quality based bitrate control (VBR). Scale is 1..31 where 1 is best.
+       // This gets rid of artifacts in the beginning of the movie; and well, even quality.
+-      c->flags |= CODEC_FLAG_QSCALE;
++      c->flags |= AV_CODEC_FLAG_QSCALE;
+       c->global_quality = FF_QP2LAMBDA * (31 - (31 * (bitrate / 100.0)));
+     }
+     else
+@@ -265,7 +266,7 @@
+ 
+     // some formats want stream headers to be separate
+     if ( of->flags & AVFMT_GLOBALHEADER )
+-      c->flags |= CODEC_FLAG_GLOBAL_HEADER;
++      c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+   }
+   else
+   {
+
+--- a/src/zm_sdp.cpp
++++ b/src/zm_sdp.cpp
+@@ -483,7 +483,7 @@
+           uint8_t *dest = 
+           (uint8_t *)av_malloc(packet_size + sizeof(start_sequence) +
+                        stream->codec->extradata_size +
+-                       FF_INPUT_BUFFER_PADDING_SIZE);
++                       AV_INPUT_BUFFER_PADDING_SIZE);
+           if(dest) {
+               if(stream->codec->extradata_size) {
+                 // av_realloc?
+@@ -494,7 +494,7 @@
+               memcpy(dest+stream->codec->extradata_size, start_sequence, sizeof(start_sequence));
+               memcpy(dest+stream->codec->extradata_size+sizeof(start_sequence), decoded_packet, packet_size);
+               memset(dest+stream->codec->extradata_size+sizeof(start_sequence)+
+-                     packet_size, 0, FF_INPUT_BUFFER_PADDING_SIZE);
++                     packet_size, 0, AV_INPUT_BUFFER_PADDING_SIZE);
+ 
+               stream->codec->extradata= dest;
+               stream->codec->extradata_size+= sizeof(start_sequence)+packet_size;
+
