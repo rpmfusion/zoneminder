@@ -34,7 +34,7 @@
 
 Name: zoneminder
 Version: 1.30.4
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jscalendar is LGPL (any version): http://www.dynarch.com/projects/calendar/
@@ -355,6 +355,9 @@ rm -rf %{_docdir}/%{name}-%{version}
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_localstatedir}/run/zoneminder
 
 %changelog
+* Thu Mar 01 2018 RPM Fusion Release Engineering <leigh123linux@googlemail.com> - 1.30.4-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Thu Jan 18 2018 Leigh Scott <leigh123linux@googlemail.com> - 1.30.4-5
 - Rebuilt for ffmpeg-3.5 git
 
