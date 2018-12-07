@@ -26,9 +26,8 @@
 
 Name: zoneminder
 Version: 1.32.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A camera monitoring and analysis tool
-Group: System Environment/Daemons
 # Mootools is inder the MIT license: http://mootools.net/
 # CakePHP is under the MIT license: https://github.com/cakephp/cakephp
 # Crud is under the MIT license: https://github.com/FriendsOfCake/crud
@@ -44,7 +43,7 @@ BuildRequires: systemd-devel
 BuildRequires: mariadb-devel
 BuildRequires: perl-podlators
 BuildRequires: polkit-devel
-BuildRequires: cmake >= 2.8.7
+BuildRequires: cmake3
 BuildRequires: gnutls-devel
 BuildRequires: bzip2-devel
 BuildRequires: pcre-devel 
@@ -149,7 +148,7 @@ too much degradation of performance.
 ./utils/zmeditconfigdata.sh ZM_OPT_FAST_DELETE no
 
 %build
-%cmake \
+%cmake3 \
         -DZM_WEB_USER="%{zmuid_final}" \
         -DZM_WEB_GROUP="%{zmuid_final}" \
         -DZM_TARGET_DISTRO="%{zmtargetdistro}" \
@@ -320,6 +319,10 @@ EOF
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_localstatedir}/run/zoneminder
 
 %changelog
+* Tue Nov 13 2018 Antonio Trande <sagitter@fedoraproject.org> - 1.32.2-2
+- Rebuild for ffmpeg-3.4.5 on el7
+- Use CMake3
+
 * Sat Oct 13 2018 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.32.2-1
 - 1.32.2 release
 - Bug fix release
