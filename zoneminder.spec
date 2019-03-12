@@ -24,7 +24,7 @@
 
 Name: zoneminder
 Version: 1.32.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # Mootools is inder the MIT license: http://mootools.net/
@@ -411,6 +411,9 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Tue Mar 12 2019 Sérgio Basto <sergio@serjux.com> - 1.32.3-3
+- Mass rebuild for x264
+
 * Tue Mar 05 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 1.32.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
