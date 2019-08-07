@@ -24,7 +24,7 @@
 
 Name: zoneminder
 Version: 1.32.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # Mootools is inder the MIT license: http://mootools.net/
@@ -411,6 +411,9 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Wed Aug 07 2019 Leigh Scott <leigh123linux@gmail.com> - 1.32.3-4
+- Rebuild for new ffmpeg version
+
 * Tue Mar 12 2019 Sérgio Basto <sergio@serjux.com> - 1.32.3-3
 - Mass rebuild for x264
 
