@@ -14,16 +14,21 @@
 # This will tell zoneminder's cmake process we are building against a known distro
 %global zmtargetdistro %{?rhel:el%{rhel}}%{!?rhel:fc%{fedora}}
 
-# Fedora >= 25 needs apcu backwards compatibility module
-%if 0%{?fedora} >= 25
+# Fedora needs apcu backwards compatibility module
+%if 0%{?fedora}
 %global with_apcu_bc 1
+%endif
+
+# Newer php's keep json functions in a subpackage
+%if 0%{?fedora} || 0%{?rhel} >= 8
+%global with_php_json 1
 %endif
 
 # The default for everything but el7 these days
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.32.3
+Version: 1.34.0
 Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
@@ -73,6 +78,7 @@ BuildRequires: libcurl-devel
 BuildRequires: libv4l-devel
 BuildRequires: desktop-file-utils
 BuildRequires: gzip
+BuildRequires: zlib-devel
 
 # ZoneMinder looks for and records the location of the ffmpeg binary during build
 BuildRequires: ffmpeg
@@ -104,7 +110,7 @@ Summary: Common files for ZoneMinder, not tied to a specific web server
 Requires: php-mysqli
 Requires: php-common
 Requires: php-gd
-%{?fedora:Requires: php-json}
+%{?with_php_json:Requires: php-json}
 Requires: php-pecl-apcu
 %{?with_apcu_bc:Requires: php-pecl-apcu-bc}
 Requires: cambozola
@@ -317,7 +323,7 @@ EOF
 
 %files common
 %license COPYING
-%doc AUTHORS README.md distros/redhat/readme/README distros/redhat/readme/README.httpd distros/redhat/readme/README.nginx distros/redhat/readme/README.https
+%doc README.md distros/redhat/readme/README distros/redhat/readme/README.httpd distros/redhat/readme/README.nginx distros/redhat/readme/README.https
 
 # We want these two folders to have "normal" read permission
 # compared to the folder contents
@@ -352,6 +358,7 @@ EOF
 %{_bindir}/zmx10.pl
 %{_bindir}/zmonvif-probe.pl
 %{_bindir}/zmstats.pl
+%{_bindir}/zmrecover.pl
 
 %{perl_vendorlib}/ZoneMinder*
 %{perl_vendorlib}/ONVIF*
@@ -377,7 +384,6 @@ EOF
 %{_tmpfilesdir}/zoneminder.httpd.tmpfiles.conf
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_sharedstatedir}/zoneminder
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_sharedstatedir}/zoneminder/events
-%dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_sharedstatedir}/zoneminder/images
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_sharedstatedir}/zoneminder/sock
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_sharedstatedir}/zoneminder/swap
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_sharedstatedir}/zoneminder/temp
@@ -402,7 +408,6 @@ EOF
 %{_tmpfilesdir}/zoneminder.nginx.tmpfiles.conf
 %dir %attr(755,nginx,nginx) %{_sharedstatedir}/zoneminder
 %dir %attr(755,nginx,nginx) %{_sharedstatedir}/zoneminder/events
-%dir %attr(755,nginx,nginx) %{_sharedstatedir}/zoneminder/images
 %dir %attr(755,nginx,nginx) %{_sharedstatedir}/zoneminder/sock
 %dir %attr(755,nginx,nginx) %{_sharedstatedir}/zoneminder/swap
 %dir %attr(755,nginx,nginx) %{_sharedstatedir}/zoneminder/temp
@@ -411,6 +416,21 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Sat Jan 18 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.0-1
+- 1.34.0 Release
+
+* Tue Dec 17 2019 Leigh Scott <leigh123linux@gmail.com> - 1.32.3-5
+- Mass rebuild for x264
+
+* Wed Aug 07 2019 Leigh Scott <leigh123linux@gmail.com> - 1.32.3-4
+- Rebuild for new ffmpeg version
+
+* Tue Mar 12 2019 Sérgio Basto <sergio@serjux.com> - 1.32.3-3
+- Mass rebuild for x264
+
+* Tue Mar 05 2019 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 1.32.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Sat Dec 08 2018 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.32.3-1
 - 1.32.3 Release
 - Break into sub-packages
