@@ -28,8 +28,8 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.34.2
-Release: 2%{?dist}
+Version: 1.34.3
+Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # Mootools is inder the MIT license: http://mootools.net/
@@ -416,6 +416,9 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Sun Feb 23 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.3-1
+- 1.34.3 Release
+
 * Sat Feb 22 2020 RPM Fusion Release Engineering <leigh123linux@googlemail.com> - 1.34.2-2
 - Rebuild for ffmpeg-4.3 git
 
