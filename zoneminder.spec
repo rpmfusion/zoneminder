@@ -428,7 +428,7 @@ EOF
 * Sat Mar 28 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.7-1
 - 1.34.7 Release
 
-* Sat Mar 23 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.6-1
+* Mon Mar 23 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.6-1
 - 1.34.6 Release
 
 * Sat Feb 29 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.5-1
