@@ -28,7 +28,7 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.34.9
+Version: 1.34.12
 Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
@@ -416,13 +416,22 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Sun May 10 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.12-1
+- 1.34.12 Release
+
+* Sat May 2 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.11-1
+- 1.34.11 Release
+
+* Sun Apr 26 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.10-1
+- 1.34.10 Release
+
 * Mon Apr 6 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.9-1
 - 1.34.9 Release
 
 * Sat Mar 28 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.7-1
 - 1.34.7 Release
 
-* Sat Mar 23 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.6-1
+* Mon Mar 23 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.6-1
 - 1.34.6 Release
 
 * Sat Feb 29 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.5-1
