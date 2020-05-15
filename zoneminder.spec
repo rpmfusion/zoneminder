@@ -419,7 +419,7 @@ EOF
 * Fri May 15 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.14-1
 - 1.34.14 Release
 
-* Wed May 14 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.13-1
+* Thu May 14 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.13-1
 - 1.34.13 Release
 
 * Sun May 10 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.12-1
