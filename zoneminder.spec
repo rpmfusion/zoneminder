@@ -29,7 +29,7 @@
 
 Name: zoneminder
 Version: 1.34.16
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # Mootools is inder the MIT license: http://mootools.net/
@@ -212,10 +212,10 @@ mv -f CakePHP-Enum-Behavior-%{ceb_version} ./web/api/app/Plugin/CakePHP-Enum-Beh
         -DZM_TARGET_DISTRO="%{zmtargetdistro}" \
         .
 
-%make_build
+%cmake3_build
 
 %install
-%make_install
+%cmake3_install
 
 desktop-file-install					\
 	--dir %{buildroot}%{_datadir}/applications	\
@@ -416,6 +416,9 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Tue Aug 04 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.16-4
+- Use new cmake build macros for f33 compat
+
 * Tue Jul 07 2020 Sérgio Basto <sergio@serjux.com> - 1.34.16-3
 - Mass rebuild for x264
 
