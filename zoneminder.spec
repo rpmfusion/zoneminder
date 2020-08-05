@@ -28,8 +28,8 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.34.16
-Release: 4%{?dist}
+Version: 1.34.17
+Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # Mootools is inder the MIT license: http://mootools.net/
@@ -416,6 +416,9 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Wed Aug 05 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.17-1
+- 1.34.17 Release
+
 * Tue Aug 04 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.16-4
 - Use new cmake build macros for f33 compat
 
