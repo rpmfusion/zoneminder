@@ -28,7 +28,7 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.34.17
+Version: 1.34.18
 Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
@@ -206,6 +206,10 @@ mv -f CakePHP-Enum-Behavior-%{ceb_version} ./web/api/app/Plugin/CakePHP-Enum-Beh
 ./utils/zmeditconfigdata.sh ZM_OPT_FAST_DELETE no
 
 %build
+# Disable LTO due to top level asm
+# See https://fedoraproject.org/wiki/LTOByDefault
+%define _lto_cflags %{nil}
+
 %cmake3 \
         -DZM_WEB_USER="%{zmuid_final}" \
         -DZM_WEB_GROUP="%{zmgid_final}" \
@@ -416,6 +420,12 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Thu Aug 06 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.18-1
+- 1.34.18 Release
+
+* Thu Aug 06 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.17-2
+- Disable LTO due to top level asm
+
 * Wed Aug 05 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.17-1
 - 1.34.17 Release
 
