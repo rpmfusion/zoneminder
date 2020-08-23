@@ -28,14 +28,18 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.34.18
-Release: 1%{?dist}
+Version: 1.34.20
+Release: 2%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
-# Mootools is inder the MIT license: http://mootools.net/
+# Mootools is under the MIT license: http://mootools.net/
+# jQuery is under the MIT license: https://jquery.org/license/
 # CakePHP is under the MIT license: https://github.com/cakephp/cakephp
 # Crud is under the MIT license: https://github.com/FriendsOfCake/crud
 # CakePHP-Enum-Behavior is under the MIT license: https://github.com/asper/CakePHP-Enum-Behavior
+# Bootstrap is under the MIT license: https://getbootstrap.com/docs/4.5/about/license/
+# Bootstrap-table is under the MIT license: https://bootstrap-table.com/docs/about/license/
+# font-awesome is under CC-BY license: https://fontawesome.com/license/free
 License: GPLv2+ and LGPLv2+ and MIT
 URL: http://www.zoneminder.com/
 
@@ -43,6 +47,7 @@ Source0: https://github.com/ZoneMinder/ZoneMinder/archive/%{version}.tar.gz#/zon
 Source1: https://github.com/ZoneMinder/crud/archive/v%{crud_version}.tar.gz#/crud-%{crud_version}.tar.gz
 Source2: https://github.com/ZoneMinder/CakePHP-Enum-Behavior/archive/%{ceb_version}.tar.gz#/cakephp-enum-behavior-%{ceb_version}.tar.gz
 
+%{?rhel:BuildRequires: epel-rpm-macros}
 BuildRequires: systemd-devel
 BuildRequires: mariadb-devel
 BuildRequires: perl-podlators
@@ -420,6 +425,14 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Sun Aug 23 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.20-1
+- 1.34.20 Release
+- Buildrequire epel-rpm-macros on rhel
+- Update license references for js libraries
+
+* Wed Aug 19 2020 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 1.34.18-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Thu Aug 06 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.18-1
 - 1.34.18 Release
 
