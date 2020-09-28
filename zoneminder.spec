@@ -28,7 +28,7 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.34.20
+Version: 1.34.21
 Release: 2%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
@@ -425,6 +425,9 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Mon Sep 28 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.21-1
+- 1.34.21 Release
+
 * Sun Aug 23 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.20-1
 - 1.34.20 Release
 - Buildrequire epel-rpm-macros on rhel
