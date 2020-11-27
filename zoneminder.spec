@@ -29,7 +29,7 @@
 
 Name: zoneminder
 Version: 1.34.22
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # Mootools is under the MIT license: http://mootools.net/
@@ -425,6 +425,9 @@ EOF
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Fri Nov 27 2020 Sérgio Basto <sergio@serjux.com> - 1.34.22-2
+- Mass rebuild for x264-0.161
+
 * Mon Sep 28 2020 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.22-1
 - 1.34.22 Release
 
