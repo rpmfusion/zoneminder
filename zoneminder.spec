@@ -29,7 +29,7 @@
 
 Name: zoneminder
 Version: 1.34.23
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # Mootools is under the MIT license: http://mootools.net/
@@ -425,6 +425,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Thu Feb 04 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 1.34.23-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Sun Jan 31 2021 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.23-1
 - 1.34.23 Release
 - create ssl cert in all cases, not just nginx
