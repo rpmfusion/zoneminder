@@ -3,10 +3,13 @@
 %global zmgid_final apache
 
 # Crud is configured as a git submodule
-%global crud_version 3.1.0-zm
+%global crud_version 3.2.0
 
 # CakePHP-Enum-Behavior is configured as a git submodule
 %global ceb_version 1.0-zm
+
+# RtspServer is configured as a git submodule
+%global rtspserver_commit     cd7fd49becad6010a1b8466bfebbd93999a39878
 
 %global sslcert %{_sysconfdir}/pki/tls/certs/localhost.crt
 %global sslkey %{_sysconfdir}/pki/tls/private/localhost.key
@@ -28,11 +31,10 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.34.26
+Version: 1.36.1
 Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
-# Mootools is under the MIT license: http://mootools.net/
 # jQuery is under the MIT license: https://jquery.org/license/
 # CakePHP is under the MIT license: https://github.com/cakephp/cakephp
 # Crud is under the MIT license: https://github.com/FriendsOfCake/crud
@@ -40,12 +42,14 @@ Group: System Environment/Daemons
 # Bootstrap is under the MIT license: https://getbootstrap.com/docs/4.5/about/license/
 # Bootstrap-table is under the MIT license: https://bootstrap-table.com/docs/about/license/
 # font-awesome is under CC-BY license: https://fontawesome.com/license/free
+# RtspServer is under the MIT license: https://github.com/PHZ76/RtspServer/blob/master/LICENSE
 License: GPLv2+ and LGPLv2+ and MIT
 URL: http://www.zoneminder.com/
 
 Source0: https://github.com/ZoneMinder/ZoneMinder/archive/%{version}.tar.gz#/zoneminder-%{version}.tar.gz
-Source1: https://github.com/ZoneMinder/crud/archive/v%{crud_version}.tar.gz#/crud-%{crud_version}.tar.gz
+Source1: https://github.com/FriendsOfCake/crud/archive/v%{crud_version}.tar.gz#/crud-%{crud_version}.tar.gz
 Source2: https://github.com/ZoneMinder/CakePHP-Enum-Behavior/archive/%{ceb_version}.tar.gz#/cakephp-enum-behavior-%{ceb_version}.tar.gz
+Source3: https://github.com/ZoneMinder/RtspServer/archive/%{rtspserver_commit}.tar.gz#/RtspServer-%{rtspserver_commit}.tar.gz
 
 %{?rhel:BuildRequires: epel-rpm-macros}
 BuildRequires: systemd-devel
@@ -88,10 +92,6 @@ BuildRequires: zlib-devel
 # ZoneMinder looks for and records the location of the ffmpeg binary during build
 BuildRequires: ffmpeg
 BuildRequires: ffmpeg-devel
-
-# Required for mp4 container support
-BuildRequires: libmp4v2-devel
-BuildRequires: x264-devel
 
 # Allow existing user base to seamlessly transition to sub-packages
 Requires: %{name}-common%{?_isa} = %{version}-%{release}
@@ -202,13 +202,14 @@ gzip -dc %{_sourcedir}/cakephp-enum-behavior-%{ceb_version}.tar.gz | tar -xvvf -
 rm -rf ./web/api/app/Plugin/CakePHP-Enum-Behavior
 mv -f CakePHP-Enum-Behavior-%{ceb_version} ./web/api/app/Plugin/CakePHP-Enum-Behavior
 
+gzip -dc %{_sourcedir}/RtspServer-%{rtspserver_commit}.tar.gz | tar -xvvf -
+rm -rf ./dep/RtspServer
+mv -f RtspServer-%{rtspserver_commit} ./dep/RtspServer
+
 # Change the following default values
 ./utils/zmeditconfigdata.sh ZM_OPT_CAMBOZOLA yes
-./utils/zmeditconfigdata.sh ZM_UPLOAD_FTP_LOC_DIR %{_localstatedir}/spool/zoneminder-upload
 ./utils/zmeditconfigdata.sh ZM_OPT_CONTROL yes
 ./utils/zmeditconfigdata.sh ZM_CHECK_FOR_UPDATES no
-./utils/zmeditconfigdata.sh ZM_DYN_SHOW_DONATE_REMINDER no
-./utils/zmeditconfigdata.sh ZM_OPT_FAST_DELETE no
 
 %build
 # Disable LTO due to top level asm
@@ -349,7 +350,6 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %{_datadir}/polkit-1/actions/com.zoneminder.systemctl.policy
 %{_bindir}/zmsystemctl.pl
 
-%{_bindir}/zma
 %{_bindir}/zmaudit.pl
 %{_bindir}/zmc
 %{_bindir}/zmcontrol.pl
@@ -366,8 +366,10 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %{_bindir}/zmtelemetry.pl
 %{_bindir}/zmx10.pl
 %{_bindir}/zmonvif-probe.pl
+%{_bindir}/zmonvif-trigger.pl
 %{_bindir}/zmstats.pl
 %{_bindir}/zmrecover.pl
+%{_bindir}/zm_rtsp_server
 
 %{perl_vendorlib}/ZoneMinder*
 %{perl_vendorlib}/ONVIF*
@@ -398,7 +400,6 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_sharedstatedir}/zoneminder/temp
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_localstatedir}/cache/zoneminder
 %dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_localstatedir}/log/zoneminder
-%dir %attr(755,%{zmuid_final},%{zmgid_final}) %{_localstatedir}/spool/zoneminder-upload
 
 %files nginx
 %config(noreplace) %attr(640,root,nginx) %{_sysconfdir}/zm/zm.conf
@@ -422,9 +423,12 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_sharedstatedir}/zoneminder/temp
 %dir %attr(755,nginx,nginx) %{_localstatedir}/cache/zoneminder
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
-%dir %attr(755,nginx,nginx) %{_localstatedir}/spool/zoneminder-upload
 
 %changelog
+* Fri May 21 2021  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.1-1
+- 1.36.1 release
+- add rtspserver submodule
+
 * Wed Apr 21 2021 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.34.26-1
 - 1.34.26 Release
 
