@@ -56,7 +56,11 @@ BuildRequires: systemd-devel
 BuildRequires: mariadb-devel
 BuildRequires: perl-podlators
 BuildRequires: polkit-devel
+%if 0%{?fedora} || 0%{?rhel} >= 8
+BuildRequires: cmake
+%else
 BuildRequires: cmake3
+%endif
 BuildRequires: gnutls-devel
 BuildRequires: bzip2-devel
 BuildRequires: pcre-devel 
