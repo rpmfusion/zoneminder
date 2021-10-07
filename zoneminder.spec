@@ -36,7 +36,7 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.36.5
+Version: 1.36.8
 Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
@@ -430,6 +430,12 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Wed Oct 06 2021  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.8-1
+- 1.36.8 release
+
+* Tue Aug 03 2021 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 1.36.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
 * Tue Jun 22 2021  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.5-1
 - 1.36.5 release
 
