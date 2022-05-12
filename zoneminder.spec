@@ -36,7 +36,7 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.36.12
+Version: 1.36.15
 Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
@@ -224,8 +224,7 @@ mv -f RtspServer-%{rtspserver_commit} ./dep/RtspServer
 %cmake \
         -DZM_WEB_USER="%{zmuid_final}" \
         -DZM_WEB_GROUP="%{zmgid_final}" \
-        -DZM_TARGET_DISTRO="%{zmtargetdistro}" \
-        .
+        -DZM_TARGET_DISTRO="%{zmtargetdistro}"
 
 %cmake_build
 
@@ -430,6 +429,13 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Thu May 12 2022  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.15-1
+- 1.36.15 release
+- call cmake macro without specifying a folder
+
+* Tue Apr 05 2022  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.14-1
+- 1.36.14 release
+
 * Sat Dec 11 2021  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.12-1
 - 1.36.12 release
 
