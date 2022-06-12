@@ -37,7 +37,7 @@
 
 Name: zoneminder
 Version: 1.36.19
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -429,6 +429,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Sun Jun 12 2022 Sérgio Basto <sergio@serjux.com> - 1.36.19-2
+- Mass rebuild for x264-0.164
+
 * Fri Jun 10 2022  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.19-1
 - 1.36.19 release
 
