@@ -9,7 +9,7 @@
 %global ceb_version 1.0-zm
 
 # RtspServer is configured as a git submodule
-%global rtspserver_commit     cd7fd49becad6010a1b8466bfebbd93999a39878
+%global rtspserver_commit     eab32851421ffe54fec0229c3efc44c642bc8d46
 
 %global sslcert %{_sysconfdir}/pki/tls/certs/localhost.crt
 %global sslkey %{_sysconfdir}/pki/tls/private/localhost.key
@@ -37,7 +37,7 @@
 
 Name: zoneminder
 Version: 1.36.30
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -432,6 +432,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Wed Oct 19 2022  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.30-2
+- Update to latest RTSPServer
+
 * Wed Oct 19 2022  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.30-1
 - 1.36.30 release
 
