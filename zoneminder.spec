@@ -36,8 +36,8 @@
 %global _hardened_build 1
 
 Name: zoneminder
-Version: 1.36.30
-Release: 2%{?dist}
+Version: 1.36.31
+Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -432,6 +432,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Tue Oct 25 2022  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.31-1
+- 1.36.31 release
+
 * Wed Oct 19 2022  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.30-2
 - Update to latest RTSPServer
 
