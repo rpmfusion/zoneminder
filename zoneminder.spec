@@ -37,7 +37,7 @@
 
 Name: zoneminder
 Version: 1.36.33
-Release: 1%{?dist}
+Release: 3%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -123,9 +123,8 @@ Requires: php-gd
 Requires: php-intl
 Requires: php-process
 %{?with_php_json:Requires: php-json}
-%{?fedora:Requires: php-pecl-memcached}
-%{?rhel:Requires: php-pecl-apcu}
 Requires: cambozola
+Requires: php-pecl-apcu
 Requires: net-tools
 Requires: psmisc
 Requires: polkit
@@ -432,6 +431,12 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Mon Apr 10 2023  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.33-3
+- Replace php Memcached with apcu on Fedora
+
+* Sat Mar 04 2023 Leigh Scott <leigh123linux@gmail.com> - 1.36.33-2
+- Rebuild for new ffmpeg
+
 * Sun Feb 26 2023  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.33-1
 - 1.36.33 release
 
