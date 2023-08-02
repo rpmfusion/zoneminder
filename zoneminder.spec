@@ -37,7 +37,7 @@
 
 Name: zoneminder
 Version: 1.36.33
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -431,6 +431,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Wed Aug 02 2023 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 1.36.33-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
 * Mon Apr 10 2023  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.33-3
 - Replace php Memcached with apcu on Fedora
 
