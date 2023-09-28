@@ -28,8 +28,10 @@
 %global cmake_build %{cmake3_build}
 %global cmake_install %{cmake3_install}
 %global cmake_pkg_name cmake3
+%global mariadevel mariadb-devel
 %else
 %global cmake_pkg_name cmake
+%global mariadevel mariadb-connector-c-devel
 %endif
 
 # The default for everything but el7 these days
@@ -37,7 +39,7 @@
 
 Name: zoneminder
 Version: 1.36.33
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -58,7 +60,7 @@ Source3: https://github.com/ZoneMinder/RtspServer/archive/%{rtspserver_commit}.t
 
 %{?rhel:BuildRequires: epel-rpm-macros}
 BuildRequires: systemd-devel
-BuildRequires: mariadb-devel
+BuildRequires: %{mariadevel}
 BuildRequires: perl-podlators
 BuildRequires: polkit-devel
 BuildRequires: %{cmake_pkg_name}
@@ -431,6 +433,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Thu Sep 28 2023 Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.33-5
+- buildrequire mariadb-connector-c-devel for all but el7
+
 * Wed Aug 02 2023 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 1.36.33-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
 
