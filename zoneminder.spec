@@ -9,7 +9,7 @@
 %global ceb_version 1.0-zm
 
 # RtspServer is configured as a git submodule
-%global rtspserver_commit     eab32851421ffe54fec0229c3efc44c642bc8d46
+%global rtspserver_commit     055d81fe1293429e496b19104a9ed3360755a440
 
 %global sslcert %{_sysconfdir}/pki/tls/certs/localhost.crt
 %global sslkey %{_sysconfdir}/pki/tls/private/localhost.key
@@ -17,29 +17,9 @@
 # This will tell zoneminder's cmake process we are building against a known distro
 %global zmtargetdistro %{?rhel:el%{rhel}}%{!?rhel:fc%{fedora}}
 
-# Newer php's keep json functions in a subpackage
-%if 0%{?fedora} || 0%{?rhel} >= 8
-%global with_php_json 1
-%endif
-
-# el7 uses cmake3 package and macros
-%if 0%{?rhel} == 7
-%global cmake %{cmake3}
-%global cmake_build %{cmake3_build}
-%global cmake_install %{cmake3_install}
-%global cmake_pkg_name cmake3
-%global mariadevel mariadb-devel
-%else
-%global cmake_pkg_name cmake
-%global mariadevel mariadb-connector-c-devel
-%endif
-
-# The default for everything but el7 these days
-%global _hardened_build 1
-
 Name: zoneminder
-Version: 1.36.33
-Release: 7%{?dist}
+Version: 1.36.34
+Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -60,10 +40,10 @@ Source3: https://github.com/ZoneMinder/RtspServer/archive/%{rtspserver_commit}.t
 
 %{?rhel:BuildRequires: epel-rpm-macros}
 BuildRequires: systemd-devel
-BuildRequires: %{mariadevel}
+BuildRequires: mariadb-devel
 BuildRequires: perl-podlators
 BuildRequires: polkit-devel
-BuildRequires: %{cmake_pkg_name}
+BuildRequires: cmake
 BuildRequires: gnutls-devel
 BuildRequires: bzip2-devel
 BuildRequires: pcre-devel 
@@ -124,7 +104,7 @@ Requires: php-common
 Requires: php-gd
 Requires: php-intl
 Requires: php-process
-%{?with_php_json:Requires: php-json}
+Requires: php-json
 Requires: cambozola
 Requires: php-pecl-apcu
 Requires: net-tools
@@ -228,7 +208,8 @@ mv -f RtspServer-%{rtspserver_commit} ./dep/RtspServer
 %cmake \
         -DZM_WEB_USER="%{zmuid_final}" \
         -DZM_WEB_GROUP="%{zmgid_final}" \
-        -DZM_TARGET_DISTRO="%{zmtargetdistro}"
+        -DZM_TARGET_DISTRO="%{zmtargetdistro}" \
+        .
 
 %cmake_build
 
@@ -433,6 +414,10 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Fri Aug 16 2024  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.34-1
+- 1.36.34 release
+- remove el7 support
+
 * Fri Aug 02 2024 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 1.36.33-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
 
