@@ -18,7 +18,7 @@
 %global zmtargetdistro %{?rhel:el%{rhel}}%{!?rhel:fc%{fedora}}
 
 Name: zoneminder
-Version: 1.36.34
+Version: 1.36.35
 Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
@@ -414,6 +414,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Tue Oct 22 2024  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.35-1
+- 1.36.35 release
+
 * Fri Aug 16 2024  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.34-1
 - 1.36.34 release
 - remove el7 support
