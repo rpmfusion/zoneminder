@@ -19,7 +19,7 @@
 
 Name: zoneminder
 Version: 1.36.35
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -112,7 +112,7 @@ Requires: psmisc
 Requires: polkit
 Requires: libjpeg-turbo
 Requires: vlc-core
-Requires: ffmpeg
+Requires: %{_bindir}/ffmpeg
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires: perl(DBD::mysql)
 Requires: perl(Archive::Tar)
@@ -414,6 +414,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Thu Aug 28 2025 Nicolas Chauvet <kwizart@gmail.com> - 1.36.35-5
+- Use requires /usr/bin/ffmpeg - rhbz#7307
+
 * Sun Jul 27 2025 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 1.36.35-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
 
