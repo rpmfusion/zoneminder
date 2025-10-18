@@ -18,8 +18,8 @@
 %global zmtargetdistro %{?rhel:el%{rhel}}%{!?rhel:fc%{fedora}}
 
 Name: zoneminder
-Version: 1.36.35
-Release: 5%{?dist}
+Version: 1.36.36
+Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -195,7 +195,6 @@ gzip -dc %{_sourcedir}/RtspServer-%{rtspserver_commit}.tar.gz | tar -xvvf -
 rm -rf ./dep/RtspServer
 mv -f RtspServer-%{rtspserver_commit} ./dep/RtspServer
 
-# Change the following default values
 ./utils/zmeditconfigdata.sh ZM_OPT_CAMBOZOLA yes
 ./utils/zmeditconfigdata.sh ZM_OPT_CONTROL yes
 ./utils/zmeditconfigdata.sh ZM_CHECK_FOR_UPDATES no
@@ -414,6 +413,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Sat Oct 18 2025  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.36-1
+- 1.36.36 release
+
 * Thu Aug 28 2025 Nicolas Chauvet <kwizart@gmail.com> - 1.36.35-5
 - Use requires /usr/bin/ffmpeg - rhbz#7307
 
