@@ -18,8 +18,8 @@
 %global zmtargetdistro %{?rhel:el%{rhel}}%{!?rhel:fc%{fedora}}
 
 Name: zoneminder
-Version: 1.36.36
-Release: 2%{?dist}
+Version: 1.36.37
+Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -413,6 +413,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Fri Dec 26 2025  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.36.37-1
+- 1.36.37 release
+
 * Wed Nov 05 2025 Leigh Scott <leigh123linux@gmail.com> - 1.36.36-2
 - Rebuild for ffmpeg-8.0
 
