@@ -9,7 +9,10 @@
 %global ceb_version 1.0-zm
 
 # RtspServer is configured as a git submodule
-%global rtspserver_commit     055d81fe1293429e496b19104a9ed3360755a440
+%global rtspserver_commit     24e6b7153aa561ecc4123cc7c8fc1b530cde0bc9
+
+# CxxUrl is configured as a git submodule
+%global CxxUrl_version     eaf46c0207df24853a238d4499e7f4426d9d234c
 
 %global sslcert %{_sysconfdir}/pki/tls/certs/localhost.crt
 %global sslkey %{_sysconfdir}/pki/tls/private/localhost.key
@@ -18,8 +21,8 @@
 %global zmtargetdistro %{?rhel:el%{rhel}}%{!?rhel:fc%{fedora}}
 
 Name: zoneminder
-Version: 1.36.37
-Release: 2%{?dist}
+Version: 1.38.0
+Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -37,10 +40,11 @@ Source0: https://github.com/ZoneMinder/ZoneMinder/archive/%{version}.tar.gz#/zon
 Source1: https://github.com/FriendsOfCake/crud/archive/v%{crud_version}.tar.gz#/crud-%{crud_version}.tar.gz
 Source2: https://github.com/ZoneMinder/CakePHP-Enum-Behavior/archive/%{ceb_version}.tar.gz#/cakephp-enum-behavior-%{ceb_version}.tar.gz
 Source3: https://github.com/ZoneMinder/RtspServer/archive/%{rtspserver_commit}.tar.gz#/RtspServer-%{rtspserver_commit}.tar.gz
+Source4: https://github.com/chmike/CxxUrl/archive/%{CxxUrl_version}.tar.gz#/CxxUrl-%{CxxUrl_version}.tar.gz
 
 %{?rhel:BuildRequires: epel-rpm-macros}
 BuildRequires: systemd-devel
-BuildRequires: mariadb-devel
+BuildRequires: mariadb-connector-c-devel
 BuildRequires: perl-podlators
 BuildRequires: polkit-devel
 BuildRequires: cmake
@@ -76,9 +80,18 @@ BuildRequires: desktop-file-utils
 BuildRequires: gzip
 BuildRequires: zlib-devel
 
+# jwt-cpp looks for nlohmann_json which is part of json-devel
+BuildRequires: json-devel
+
 # ZoneMinder looks for and records the location of the ffmpeg binary during build
 BuildRequires: ffmpeg
 BuildRequires: ffmpeg-devel
+
+# Optional but needed for ONVIF and others
+BuildRequires: gnutls-devel
+BuildRequires: gsoap-devel
+BuildRequires: libvncserver-devel
+BuildRequires: mosquitto-devel
 
 # Allow existing user base to seamlessly transition to sub-packages
 Requires: %{name}-common%{?_isa} = %{version}-%{release}
@@ -105,7 +118,6 @@ Requires: php-gd
 Requires: php-intl
 Requires: php-process
 Requires: php-json
-Requires: cambozola
 Requires: php-pecl-apcu
 Requires: net-tools
 Requires: psmisc
@@ -195,7 +207,11 @@ gzip -dc %{_sourcedir}/RtspServer-%{rtspserver_commit}.tar.gz | tar -xvvf -
 rm -rf ./dep/RtspServer
 mv -f RtspServer-%{rtspserver_commit} ./dep/RtspServer
 
-./utils/zmeditconfigdata.sh ZM_OPT_CAMBOZOLA yes
+gzip -dc %{_sourcedir}/CxxUrl-%{CxxUrl_version}.tar.gz | tar -xvvf -
+rm -rf ./dep/CxxUrl
+mv -f CxxUrl-%{CxxUrl_version} ./dep/CxxUrl
+
+# Change the following default values
 ./utils/zmeditconfigdata.sh ZM_OPT_CONTROL yes
 ./utils/zmeditconfigdata.sh ZM_CHECK_FOR_UPDATES no
 
@@ -224,6 +240,15 @@ desktop-file-install					\
 # Remove unwanted files and folders
 find %{buildroot} \( -name .htaccess -or -name .editorconfig -or -name .packlist -or -name .git -or -name .gitignore -or -name .gitattributes -or -name .travis.yml \) -type f -delete > /dev/null 2>&1 || :
 
+# Remove third-party header and cmake files that should not have been installed
+rm -rf %{buildroot}%{_prefix}/cmake
+rm -rf %{buildroot}%{_prefix}/%{_lib}/cmake/CxxUrl
+rm -rf %{buildroot}%{_includedir}
+
+# delete all static libraries in accordance with Fedora packaging guidelines
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/#_packaging_static_libraries
+find %{buildroot} \( -name '*.la' -o -name '*.a' \) -type f -delete -print
+
 # Recursively change shebang in all relevant scripts and set execute permission
 find %{buildroot}%{_datadir}/zoneminder/www/api \( -name cake -or -name cake.php \) -type f -exec sed -i 's\^#!/usr/bin/env bash$\#!%{_buildshell}\' {} \; -exec %{__chmod} 755 {} \;
 
@@ -233,6 +258,9 @@ ln -s ../../../../../../../..%{_sysconfdir}/pki/tls/certs/ca-bundle.crt %{buildr
 
 # Handle the polkit file differently for web server agnostic support (see post)
 rm -f %{buildroot}%{_datadir}/polkit-1/rules.d/com.zoneminder.systemctl.rules
+
+%check
+# Nothing to do. No tests exist.
 
 %post common
 # Initial installation
@@ -315,6 +343,7 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 
 %postun
 %systemd_postun_with_restart %{name}.service
+%systemd_postun_with_restart php-fpm.service
 
 %files
 # nothing
@@ -336,12 +365,15 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 
 %{_unitdir}/zoneminder.service
 %{_datadir}/polkit-1/actions/com.zoneminder.systemctl.policy
+%{_datadir}/polkit-1/actions/com.zoneminder.arp-scan.policy
+%{_datadir}/polkit-1/rules.d/com.zoneminder.arp-scan.rules
 %{_bindir}/zmsystemctl.pl
 
 %{_bindir}/zmaudit.pl
 %{_bindir}/zmc
 %{_bindir}/zmcontrol.pl
 %{_bindir}/zmdc.pl
+%{_bindir}/zmeventtool.pl
 %{_bindir}/zmfilter.pl
 %{_bindir}/zmpkg.pl
 %{_bindir}/zmtrack.pl
@@ -413,6 +445,10 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Sat Feb 07 2026  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.38.0-1
+- 1.38.0 release
+- use mariadb-connector-c-devel 
+
 * Mon Feb 02 2026 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 1.36.37-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 
