@@ -21,7 +21,7 @@
 %global zmtargetdistro %{?rhel:el%{rhel}}%{!?rhel:fc%{fedora}}
 
 Name: zoneminder
-Version: 1.38.0
+Version: 1.38.1
 Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
@@ -446,6 +446,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Sat Feb 21 2026  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.38.1-1
+- 1.38.1 release
+
 * Sat Feb 07 2026  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.38.0-1
 - 1.38.0 release
 - use mariadb-connector-c-devel 
