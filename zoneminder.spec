@@ -22,7 +22,7 @@
 
 Name: zoneminder
 Version: 1.38.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -446,6 +446,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Sat Aug 22 2026 Leigh Scott <leigh123linux@gmail.com> - 1.38.4-2
+- Rebuild for new ffmpeg
+
 * Tue Aug 11 2026  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.38.4-1
 - 1.38.4 release
 
