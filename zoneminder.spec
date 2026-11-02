@@ -21,8 +21,8 @@
 %global zmtargetdistro %{?rhel:el%{rhel}}%{!?rhel:fc%{fedora}}
 
 Name: zoneminder
-Version: 1.38.4
-Release: 2%{?dist}
+Version: 1.38.6
+Release: 1%{?dist}
 Summary: A camera monitoring and analysis tool
 Group: System Environment/Daemons
 # jQuery is under the MIT license: https://jquery.org/license/
@@ -55,7 +55,6 @@ BuildRequires: pcre2-devel
 BuildRequires: libjpeg-turbo-devel
 BuildRequires: findutils
 BuildRequires: coreutils
-BuildRequires: net-tools
 BuildRequires: perl
 BuildRequires: perl-generators
 BuildRequires: perl(Archive::Tar)
@@ -117,14 +116,14 @@ Requires: php-mysqli
 Requires: php-common
 Requires: php-gd
 Requires: php-intl
+Requires: php-mbstring
 Requires: php-process
 Requires: php-json
 Requires: php-pecl-apcu
-Requires: net-tools
+Recommends: arp-scan
 Requires: psmisc
 Requires: polkit
 Requires: libjpeg-turbo
-Requires: vlc-core
 Requires: %{_bindir}/ffmpeg
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires: perl(DBD::mysql)
@@ -136,6 +135,7 @@ Requires: perl(Net::SMTP)
 Requires: perl(Net::FTP)
 Requires: perl(LWP::Protocol::https)
 Requires: perl(Module::Load::Conditional)
+Requires: perl(XML::LibXML)
 Requires: ca-certificates
 Requires: zip
 %{?systemd_requires}
@@ -225,6 +225,10 @@ mv -f CxxUrl-%{CxxUrl_version} ./dep/CxxUrl
         -DZM_WEB_USER="%{zmuid_final}" \
         -DZM_WEB_GROUP="%{zmgid_final}" \
         -DZM_TARGET_DISTRO="%{zmtargetdistro}" \
+        -DZM_PATH_ARP="/usr/sbin/ip neigh" \
+        -DZM_PATH_ARP_SCAN="/usr/sbin/arp-scan" \
+        -DZM_PATH_IP="/usr/sbin/ip" \
+        -DZM_PATH_IFCONFIG="/usr/sbin/ifconfig" \
         .
 
 %cmake_build
@@ -446,6 +450,9 @@ ln -sf %{_sysconfdir}/zm/www/zoneminder.nginx.conf %{_sysconfdir}/zm/www/zonemin
 %dir %attr(755,nginx,nginx) %{_localstatedir}/log/zoneminder
 
 %changelog
+* Mon Nov 02 2026  Andrew Bauer <zonexpertconsulting@outlook.com> - 1.38.6-1
+- 1.38.6 release
+
 * Sat Aug 22 2026 Leigh Scott <leigh123linux@gmail.com> - 1.38.4-2
 - Rebuild for new ffmpeg
 
